@@ -1,3 +1,5 @@
+use crate::util::VecUtil;
+
 pub fn problem_one() {
     let problem_text = include_str!("inputs/problem_1.txt");
     let nums: Vec<i32> = problem_text
@@ -5,15 +7,8 @@ pub fn problem_one() {
         .filter_map(|line| line.parse().ok())
         .collect();
 
-    let total = nums
-        .windows(2)
-        .filter(|window| {
-            let lhs = window[0];
-            let rhs = window[1];
-            lhs < rhs
-        })
-        .count();
-    println!("Problem One: {}", total);
+    let total = nums.count_increasing_pairs();
+    println!("Problem 1-1: {}", total);
 }
 
 pub fn problem_one_part_two() {
@@ -35,5 +30,5 @@ pub fn problem_one_part_two() {
         })
         .count();
 
-    println!("Problem Two: {}", total);
+    println!("Problem 1-2: {}", total);
 }
