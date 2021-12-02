@@ -1,8 +1,8 @@
-pub trait VecUtil {
+pub trait VecExtension {
     fn count_increasing_pairs(&self) -> usize;
 }
 
-impl<T> VecUtil for Vec<T>
+impl<T> VecExtension for Vec<T>
 where
     T: Ord + Copy,
 {

@@ -12,8 +12,8 @@ fn main() {
 
     let opt = Opt::from_args();
     let problem_sets = [|| {
-        problem_one();
-        problem_one_part_two();
+        println!("1-1: ({})", problem_one());
+        println!("1-2: ({})", problem_one_part_two());
     }];
 
     if let Some(problems) = opt.problems_to_run {

@@ -1,6 +1,6 @@
-use crate::util::VecUtil;
+use crate::util::VecExtension;
 
-pub fn problem_one() -> usize {
+#[must_use] pub fn problem_one() -> usize {
     let problem_text = include_str!("inputs/problem_1.txt");
 
     let nums: Vec<i32> = problem_text
@@ -8,14 +8,12 @@ pub fn problem_one() -> usize {
         .filter_map(|line| line.parse().ok())
         .collect();
 
-    let total = nums.count_increasing_pairs();
+    
 
-    println!("Problem 1-1: {}", total);
-
-    total
+    nums.count_increasing_pairs()
 }
 
-pub fn problem_one_part_two() -> usize {
+#[must_use] pub fn problem_one_part_two() -> usize {
     let problem_text = include_str!("inputs/problem_1.txt");
 
     let nums: Vec<i32> = problem_text
@@ -23,12 +21,10 @@ pub fn problem_one_part_two() -> usize {
         .filter_map(|line| line.parse().ok())
         .collect();
 
-    let sums: Vec<i32> = nums.windows(3).map(|x| x.iter().sum()).collect();
-    let total = sums.count_increasing_pairs();
+    let totals: Vec<i32> = nums.windows(3).map(|x| x.iter().sum()).collect();
+    
 
-    println!("Problem 1-2: {}", total);
-
-    total
+    totals.count_increasing_pairs() 
 }
 
 #[cfg(test)]
