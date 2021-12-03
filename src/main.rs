@@ -1,4 +1,4 @@
-use advent_of_code_2021::problems::{problem_one, problem_one_part_two};
+use advent_of_code_2021::problems::{problem_one, problem_one_part_two, two::problem_two};
 
 use structopt::StructOpt;
 
@@ -11,10 +11,15 @@ fn main() {
     }
 
     let opt = Opt::from_args();
-    let problem_sets = [|| {
-        println!("1-1: ({})", problem_one());
-        println!("1-2: ({})", problem_one_part_two());
-    }];
+    let problem_sets = [
+        || {
+            println!("1-1: ({})", problem_one());
+            println!("1-2: ({})", problem_one_part_two());
+        },
+        || {
+            println!("2-1: ({})", problem_two());
+        },
+    ];
 
     if let Some(problems) = opt.problems_to_run {
         for index in problems {
