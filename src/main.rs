@@ -1,5 +1,6 @@
 use advent_of_code_2021::problems::{problem_one, problem_one_part_two, two::problem_two};
 
+use advent_of_code_2021::problems::two::problem_two_two;
 use structopt::StructOpt;
 
 fn main() {
@@ -18,6 +19,7 @@ fn main() {
         },
         || {
             println!("2-1: ({})", problem_two());
+            println!("2-2: ({})", problem_two_two());
         },
     ];
 

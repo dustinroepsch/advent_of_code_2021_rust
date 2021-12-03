@@ -52,7 +52,43 @@ pub mod two {
         }
     }
 
-    #[must_use] pub fn problem_two() -> i32 {
+    #[must_use]
+    pub fn problem_two_two() -> i32 {
+        let problem_text = include_str!("inputs/problem_2.txt");
+
+        let plans: Vec<(Direction, i32)> = problem_text
+            .lines()
+            .map(|line| line.trim().split(' ').collect())
+            .map(|arr: Vec<&str>| {
+                let direction: Direction = arr[0].try_into().unwrap();
+                let amount: i32 = arr[1].parse().unwrap();
+                (direction, amount)
+            })
+            .collect();
+
+        let mut horizontal = 0;
+        let mut depth = 0;
+        let mut aim = 0;
+
+        for (direction, amount) in plans {
+            match direction {
+                Down => {
+                    aim += amount;
+                }
+                Forward => {
+                    horizontal += amount;
+                    depth += aim * amount;
+                }
+                Up => {
+                    aim -= amount;
+                }
+            };
+        }
+        horizontal * depth
+    }
+
+    #[must_use]
+    pub fn problem_two() -> i32 {
         let problem_text = include_str!("inputs/problem_2.txt");
 
         let plans: Vec<(Direction, i32)> = problem_text
