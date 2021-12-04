@@ -2,7 +2,7 @@
 
 This repo contains my advent of code solutions.
 
-## Usage
+## Testing
 
 To check that my answers are still what they are supposed to be:
 
@@ -10,8 +10,10 @@ To check that my answers are still what they are supposed to be:
 cargo test --release
 ```
 
-To print all the answers:
+## Usage
+Print usage info with
 
 ```sh
-cargo run --release
+cargo run --release -- -h
 ```
+
