@@ -1,10 +1,7 @@
 use crate::problems::two::Direction::{Down, Forward, Up};
 use crate::problems::ProblemSet;
 
-pub const PROBLEM_SET: ProblemSet = ProblemSet {
-    part_a: self::part_a,
-    part_b: self::part_b,
-};
+pub const PROBLEM_SET: ProblemSet = ProblemSet { part_a, part_b };
 
 enum Direction {
     Forward,

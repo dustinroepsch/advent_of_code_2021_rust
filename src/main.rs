@@ -3,7 +3,11 @@ use advent_of_code_2021::problems::ProblemSet;
 use std::path::PathBuf;
 use structopt::StructOpt;
 
-const PROBLEMS: [ProblemSet; 2] = [problems::one::PROBLEM_SET, problems::two::PROBLEM_SET];
+const PROBLEMS: [ProblemSet; 3] = [
+    problems::one::PROBLEM_SET,
+    problems::two::PROBLEM_SET,
+    problems::three::PROBLEM_SET,
+];
 
 #[derive(StructOpt)]
 struct Opt {

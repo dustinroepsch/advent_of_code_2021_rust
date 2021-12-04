@@ -1,4 +1,7 @@
+use crate::problems::ProblemSet;
 use std::cmp::Ordering;
+
+pub const PROBLEM_SET: ProblemSet = ProblemSet { part_a, part_b };
 
 #[derive(Copy, Clone)]
 struct BitCounter {
@@ -176,6 +179,6 @@ mod tests {
 
     #[test]
     fn part_b() {
-        assert_eq!(super::part_b(PROBLEM_TEXT), "todo");
+        assert_eq!(super::part_b(PROBLEM_TEXT), "5852595");
     }
 }

@@ -1,10 +1,7 @@
 use crate::problems::ProblemSet;
 use crate::util::VecExtension;
 
-pub const PROBLEM_SET: ProblemSet = ProblemSet {
-    part_a: self::part_a,
-    part_b: self::part_b,
-};
+pub const PROBLEM_SET: ProblemSet = ProblemSet { part_a, part_b };
 
 #[must_use]
 pub fn part_a(problem_text: &str) -> String {
