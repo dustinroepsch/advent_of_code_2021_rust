@@ -15,13 +15,12 @@ struct Opt {
     pub day: usize,
 
     #[structopt(parse(from_os_str))]
-    pub file: Option<PathBuf>,
+    pub file_path: PathBuf,
 }
 
 fn main() {
     let opt: Opt = Opt::from_args();
-    let path = opt.file.unwrap();
-    let text: String = std::fs::read_to_string(path).unwrap();
+    let text: String = std::fs::read_to_string(opt.file_path).unwrap();
     let problem_set = &PROBLEMS[opt.day - 1];
     println!("Day: {}", opt.day);
     println!("Part A: ({})", (problem_set.part_a)(&text));
