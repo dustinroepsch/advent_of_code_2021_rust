@@ -3,10 +3,11 @@ use advent_of_code_2021::problems::ProblemSet;
 use std::path::PathBuf;
 use structopt::StructOpt;
 
-const PROBLEMS: [ProblemSet; 3] = [
+const PROBLEMS: [ProblemSet; 4] = [
     problems::one::PROBLEM_SET,
     problems::two::PROBLEM_SET,
     problems::three::PROBLEM_SET,
+    problems::four::PROBLEM_SET,
 ];
 
 #[derive(StructOpt)]
@@ -19,8 +20,8 @@ struct Opt {
 }
 
 fn main() {
-    let opt: Opt = Opt::from_args();
-    let text: String = std::fs::read_to_string(opt.file_path).unwrap();
+    let opt = Opt::from_args();
+    let text = std::fs::read_to_string(opt.file_path).unwrap();
     let problem_set = &PROBLEMS[opt.day - 1];
     println!("Day: {}", opt.day);
     println!("Part A: ({})", (problem_set.part_a)(&text));
