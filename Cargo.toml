@@ -10,3 +10,4 @@ opt-level = 3
 itertools ="0.10"
 num = "0.4"
 structopt = "0.3"
+thiserror = "1.0"

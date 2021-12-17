@@ -1,6 +1,10 @@
 use crate::problems::ProblemSet;
+use std::cmp::Ordering;
+use std::num::ParseIntError;
 
+use crate::problems::five::PointParseError::{NotEnoughParts, TooManyParts};
 use std::str::FromStr;
+use thiserror::Error;
 
 pub const PROBLEM_SET: ProblemSet = ProblemSet { part_a, part_b };
 
@@ -10,18 +14,34 @@ struct Point {
     y: i32,
 }
 
+#[derive(Error, Debug)]
+enum PointParseError {
+    #[error("Not enough parts after splitting by \",\" (expected: 2, found: {0}).")]
+    NotEnoughParts(usize),
+    #[error("Too many parts after splitting by \",\" (expected: 2, found: {0}).")]
+    TooManyParts(usize),
+    #[error("Couldn't parse point parts into ints.")]
+    InvalidIntError(#[from] ParseIntError),
+}
+
 impl FromStr for Point {
-    type Err = ();
+    type Err = PointParseError;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let parts: Vec<&str> = s.split(',').collect();
 
-        if parts.len() != 2 {
-            return Err(());
+        let err = match parts.len().cmp(&2) {
+            Ordering::Less => Some(NotEnoughParts(parts.len())),
+            Ordering::Greater => Some(TooManyParts(parts.len())),
+            Ordering::Equal => None,
+        };
+
+        if let Some(err) = err {
+            return Err(err);
         }
 
-        let x: i32 = parts[0].trim().parse().map_err(|_| ())?;
-        let y: i32 = parts[1].trim().parse().map_err(|_| ())?;
+        let x: i32 = parts[0].trim().parse()?;
+        let y: i32 = parts[1].trim().parse()?;
 
         Ok(Point::new(x, y))
     }
@@ -53,14 +73,32 @@ impl LineSegment {
     }
 }
 
+#[derive(Error, Debug)]
+enum LineSegmentParseError {
+    #[error("Not enough parts after splitting by \"->\" (expected: 2, found: {0}).")]
+    NotEnoughParts(usize),
+    #[error("Too many parts after splitting by \"->\" (expected: 2, found: {0}).")]
+    TooManyParts(usize),
+    #[error("Couldn't parse points")]
+    InvalidPoints(#[from] PointParseError),
+}
+
 impl FromStr for LineSegment {
-    type Err = ();
+    type Err = LineSegmentParseError;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let parts: Vec<&str> = s.split("->").collect();
-        if parts.len() != 2 {
-            return Err(());
+
+        let err = match parts.len().cmp(&2) {
+            Ordering::Less => Some(LineSegmentParseError::NotEnoughParts(parts.len())),
+            Ordering::Greater => Some(LineSegmentParseError::TooManyParts(parts.len())),
+            Ordering::Equal => None,
+        };
+
+        if let Some(err) = err {
+            return Err(err);
         }
+
         let a: Point = parts[0].parse()?;
         let b: Point = parts[1].parse()?;
 
