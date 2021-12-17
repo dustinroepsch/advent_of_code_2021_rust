@@ -72,11 +72,8 @@ impl FromStr for LineSegment {
 pub fn part_a(problem_text: &str) -> String {
     let segments: Vec<LineSegment> = problem_text
         .lines()
-        .filter_map(|line| {
-            let seg: LineSegment = line.parse().ok()?;
-            Some(seg)
-        })
-        .filter(|seg| seg.is_horiz() || seg.is_vert())
+        .filter_map(|line| line.parse().ok())
+        .filter(|seg: &LineSegment| seg.is_horiz() || seg.is_vert())
         .collect();
 
     format!("{:?}", segments)
