@@ -1,8 +1,6 @@
 use crate::problems::ProblemSet;
 
-
 use std::str::FromStr;
-
 
 pub const PROBLEM_SET: ProblemSet = ProblemSet { part_a, part_b };
 
@@ -45,6 +43,14 @@ impl LineSegment {
     fn new(a: Point, b: Point) -> Self {
         Self { a, b }
     }
+
+    fn is_horiz(&self) -> bool {
+        self.a.y == self.b.y
+    }
+
+    fn is_vert(&self) -> bool {
+        self.a.x == self.b.x
+    }
 }
 
 impl FromStr for LineSegment {
@@ -62,19 +68,22 @@ impl FromStr for LineSegment {
     }
 }
 
-#[must_use] pub fn part_a(problem_text: &str) -> String {
+#[must_use]
+pub fn part_a(problem_text: &str) -> String {
     let segments: Vec<LineSegment> = problem_text
         .lines()
         .filter_map(|line| {
             let seg: LineSegment = line.parse().ok()?;
             Some(seg)
         })
+        .filter(|seg| seg.is_horiz() || seg.is_vert())
         .collect();
 
     format!("{:?}", segments)
 }
 
-#[must_use] pub fn part_b(_problem_text: &str) -> String {
+#[must_use]
+pub fn part_b(_problem_text: &str) -> String {
     "hello_world".to_string()
 }
 
