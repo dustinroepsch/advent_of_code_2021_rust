@@ -56,7 +56,7 @@ pub fn part_a(problem_text: &str) -> String {
 }
 
 #[must_use]
-pub fn part_b(problem_text: &str) -> String {
+pub fn part_b(_problem_text: &str) -> String {
     "hello_world".to_string()
 }
 

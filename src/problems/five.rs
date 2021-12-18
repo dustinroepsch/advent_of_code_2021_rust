@@ -1,5 +1,5 @@
 use crate::problems::ProblemSet;
-use std::cmp::{max, min, Ordering};
+use std::cmp::{max, min};
 use std::collections::HashSet;
 use std::num::ParseIntError;
 use std::ops::Add;
@@ -25,10 +25,8 @@ impl Add for Point {
 
 #[derive(Error, Debug)]
 enum PointParseError {
-    #[error("Not enough parts after splitting by \",\" (expected: 2, found: {0}).")]
-    NotEnoughParts(usize),
-    #[error("Too many parts after splitting by \",\" (expected: 2, found: {0}).")]
-    TooManyParts(usize),
+    #[error("Couldn't split the string on ,")]
+    UnableToSplit,
     #[error("Couldn't parse point parts into ints.")]
     InvalidIntError(#[from] ParseIntError),
 }
@@ -37,18 +35,10 @@ impl FromStr for Point {
     type Err = PointParseError;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let parts: Vec<&str> = s.split(',').collect();
+        let (x, y) = s.split_once(',').ok_or(PointParseError::UnableToSplit)?;
 
-        if let Some(err) = match parts.len().cmp(&2) {
-            Ordering::Less => Some(PointParseError::NotEnoughParts(parts.len())),
-            Ordering::Greater => Some(PointParseError::TooManyParts(parts.len())),
-            Ordering::Equal => None,
-        } {
-            return Err(err);
-        }
-
-        let x: i32 = parts[0].trim().parse()?;
-        let y: i32 = parts[1].trim().parse()?;
+        let x: i32 = x.trim().parse()?;
+        let y: i32 = y.trim().parse()?;
 
         Ok(Point::new(x, y))
     }
@@ -116,30 +106,22 @@ impl LineSegment {
 
 #[derive(Error, Debug)]
 enum LineSegmentParseError {
-    #[error("Not enough parts after splitting by \"->\" (expected: 2, found: {0}).")]
-    NotEnoughParts(usize),
-    #[error("Too many parts after splitting by \"->\" (expected: 2, found: {0}).")]
-    TooManyParts(usize),
     #[error("Couldn't parse points")]
     InvalidPoints(#[from] PointParseError),
+    #[error("Couldn't split the string on \"->\"")]
+    UnableToSplit,
 }
 
 impl FromStr for LineSegment {
     type Err = LineSegmentParseError;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let parts: Vec<&str> = s.split("->").collect();
+        let (a, b) = s
+            .split_once("->")
+            .ok_or(LineSegmentParseError::UnableToSplit)?;
 
-        if let Some(err) = match parts.len().cmp(&2) {
-            Ordering::Less => Some(LineSegmentParseError::NotEnoughParts(parts.len())),
-            Ordering::Greater => Some(LineSegmentParseError::TooManyParts(parts.len())),
-            Ordering::Equal => None,
-        } {
-            return Err(err);
-        }
-
-        let a: Point = parts[0].parse()?;
-        let b: Point = parts[1].parse()?;
+        let a: Point = a.parse()?;
+        let b: Point = b.parse()?;
 
         Ok(LineSegment::new(a, b))
     }
