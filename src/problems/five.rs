@@ -2,7 +2,6 @@ use crate::problems::ProblemSet;
 use std::cmp::Ordering;
 use std::num::ParseIntError;
 
-use crate::problems::five::PointParseError::{NotEnoughParts, TooManyParts};
 use std::str::FromStr;
 use thiserror::Error;
 
@@ -31,8 +30,8 @@ impl FromStr for Point {
         let parts: Vec<&str> = s.split(',').collect();
 
         let err = match parts.len().cmp(&2) {
-            Ordering::Less => Some(NotEnoughParts(parts.len())),
-            Ordering::Greater => Some(TooManyParts(parts.len())),
+            Ordering::Less => Some(PointParseError::NotEnoughParts(parts.len())),
+            Ordering::Greater => Some(PointParseError::TooManyParts(parts.len())),
             Ordering::Equal => None,
         };
 
