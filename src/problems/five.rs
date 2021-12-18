@@ -2,16 +2,25 @@ use crate::problems::ProblemSet;
 use std::cmp::{max, min, Ordering};
 use std::collections::HashSet;
 use std::num::ParseIntError;
+use std::ops::Add;
 
 use std::str::FromStr;
 use thiserror::Error;
 
 pub const PROBLEM_SET: ProblemSet = ProblemSet { part_a, part_b };
 
-#[derive(Debug, Copy, Clone, Eq, PartialEq, Hash)]
+#[derive(Debug, Copy, Clone, Eq, PartialEq, Hash, Ord, PartialOrd)]
 struct Point {
     x: i32,
     y: i32,
+}
+
+impl Add for Point {
+    type Output = Point;
+
+    fn add(self, rhs: Self) -> Self::Output {
+        Point::new(self.x + rhs.x, self.y + rhs.y)
+    }
 }
 
 #[derive(Error, Debug)]
@@ -84,8 +93,21 @@ impl LineSegment {
             let end_y = max(self.a.y, self.b.y);
             return (start_y..=end_y).map(|y| Point::new(x, y)).collect();
         }
-
-        panic!("Only vertical and horiz are supported");
+        let mut points = HashSet::new();
+        let mut current_point = min(self.a, self.b);
+        let ending_point = max(self.a, self.b);
+        let direction = if current_point.y < ending_point.y {
+            Point::new(1, 1)
+        } else {
+            Point::new(1, -1)
+        };
+        points.insert(current_point);
+        while current_point != ending_point {
+            points.insert(current_point);
+            current_point = current_point + direction;
+        }
+        points.insert(current_point);
+        points
     }
 }
 
@@ -120,14 +142,7 @@ impl FromStr for LineSegment {
     }
 }
 
-#[must_use]
-pub fn part_a(problem_text: &str) -> String {
-    let segments: Vec<LineSegment> = problem_text
-        .lines()
-        .filter_map(|line| line.parse().ok())
-        .filter(|seg: &LineSegment| seg.is_horiz() || seg.is_vert())
-        .collect();
-
+fn count_duplicate_points(segments: Vec<LineSegment>) -> usize {
     let mut all_points = HashSet::new();
     let mut seen_atleast_twice = HashSet::new();
 
@@ -139,12 +154,29 @@ pub fn part_a(problem_text: &str) -> String {
             all_points.insert(point);
         }
     }
-    seen_atleast_twice.len().to_string()
+
+    seen_atleast_twice.len()
 }
 
 #[must_use]
-pub fn part_b(_problem_text: &str) -> String {
-    "hello_world".to_string()
+pub fn part_a(problem_text: &str) -> String {
+    let segments: Vec<LineSegment> = problem_text
+        .lines()
+        .filter_map(|line| line.parse().ok())
+        .filter(|seg: &LineSegment| seg.is_horiz() || seg.is_vert())
+        .collect();
+
+    count_duplicate_points(segments).to_string()
+}
+
+#[must_use]
+pub fn part_b(problem_text: &str) -> String {
+    let segments: Vec<LineSegment> = problem_text
+        .lines()
+        .filter_map(|line| line.parse().ok())
+        .collect();
+
+    count_duplicate_points(segments).to_string()
 }
 
 #[cfg(test)]
@@ -154,5 +186,10 @@ mod tests {
     #[test]
     fn part_a() {
         assert_eq!(super::part_a(PROBLEM_TEXT), "6113");
+    }
+
+    #[test]
+    fn part_b() {
+        assert_eq!(super::part_b(PROBLEM_TEXT), "20373");
     }
 }
