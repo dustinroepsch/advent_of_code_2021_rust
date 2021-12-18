@@ -29,13 +29,11 @@ impl FromStr for Point {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let parts: Vec<&str> = s.split(',').collect();
 
-        let err = match parts.len().cmp(&2) {
+        if let Some(err) = match parts.len().cmp(&2) {
             Ordering::Less => Some(PointParseError::NotEnoughParts(parts.len())),
             Ordering::Greater => Some(PointParseError::TooManyParts(parts.len())),
             Ordering::Equal => None,
-        };
-
-        if let Some(err) = err {
+        } {
             return Err(err);
         }
 
@@ -88,13 +86,11 @@ impl FromStr for LineSegment {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let parts: Vec<&str> = s.split("->").collect();
 
-        let err = match parts.len().cmp(&2) {
+        if let Some(err) = match parts.len().cmp(&2) {
             Ordering::Less => Some(LineSegmentParseError::NotEnoughParts(parts.len())),
             Ordering::Greater => Some(LineSegmentParseError::TooManyParts(parts.len())),
             Ordering::Equal => None,
-        };
-
-        if let Some(err) = err {
+        } {
             return Err(err);
         }
 
