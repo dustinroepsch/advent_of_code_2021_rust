@@ -1,5 +1,6 @@
 use crate::problems::ProblemSet;
-use std::cmp::Ordering;
+use std::cmp::{max, min, Ordering};
+use std::collections::HashSet;
 use std::num::ParseIntError;
 
 use std::str::FromStr;
@@ -7,7 +8,7 @@ use thiserror::Error;
 
 pub const PROBLEM_SET: ProblemSet = ProblemSet { part_a, part_b };
 
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone, Eq, PartialEq, Hash)]
 struct Point {
     x: i32,
     y: i32,
@@ -68,6 +69,24 @@ impl LineSegment {
     fn is_vert(&self) -> bool {
         self.a.x == self.b.x
     }
+
+    fn points(&self) -> HashSet<Point> {
+        if self.is_horiz() {
+            let y = self.a.y;
+            let start_x = min(self.a.x, self.b.x);
+            let end_x = max(self.a.x, self.b.x);
+            return (start_x..=end_x).map(|x| Point::new(x, y)).collect();
+        }
+
+        if self.is_vert() {
+            let x = self.a.x;
+            let start_y = min(self.a.y, self.b.y);
+            let end_y = max(self.a.y, self.b.y);
+            return (start_y..=end_y).map(|y| Point::new(x, y)).collect();
+        }
+
+        panic!("Only vertical and horiz are supported");
+    }
 }
 
 #[derive(Error, Debug)]
@@ -109,7 +128,18 @@ pub fn part_a(problem_text: &str) -> String {
         .filter(|seg: &LineSegment| seg.is_horiz() || seg.is_vert())
         .collect();
 
-    format!("{:?}", segments)
+    let mut all_points = HashSet::new();
+    let mut seen_atleast_twice = HashSet::new();
+
+    for segment in segments {
+        for point in segment.points() {
+            if all_points.contains(&point) {
+                seen_atleast_twice.insert(point);
+            }
+            all_points.insert(point);
+        }
+    }
+    seen_atleast_twice.len().to_string()
 }
 
 #[must_use]
@@ -121,8 +151,8 @@ pub fn part_b(_problem_text: &str) -> String {
 mod tests {
     const PROBLEM_TEXT: &str = include_str!("inputs/problem_5.txt");
 
-    // #[test]
-    // fn part_a() {
-    //     assert_eq!(super::part_a(PROBLEM_TEXT), "1529");
-    // }
+    #[test]
+    fn part_a() {
+        assert_eq!(super::part_a(PROBLEM_TEXT), "6113");
+    }
 }
