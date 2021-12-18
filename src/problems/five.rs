@@ -93,6 +93,7 @@ impl LineSegment {
             let end_y = max(self.a.y, self.b.y);
             return (start_y..=end_y).map(|y| Point::new(x, y)).collect();
         }
+
         let mut points = HashSet::new();
         let mut current_point = min(self.a, self.b);
         let ending_point = max(self.a, self.b);
@@ -101,12 +102,14 @@ impl LineSegment {
         } else {
             Point::new(1, -1)
         };
+
         points.insert(current_point);
         while current_point != ending_point {
             points.insert(current_point);
             current_point = current_point + direction;
         }
         points.insert(current_point);
+
         points
     }
 }
