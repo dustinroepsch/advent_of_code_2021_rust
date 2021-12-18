@@ -3,6 +3,10 @@ name = "advent_of_code_2021"
 version = "0.3.0"
 edition = "2021"
 
+[profile.release]
+lto = true
+codegen-units = 1
+
 [profile.test]
 opt-level = 3
 
