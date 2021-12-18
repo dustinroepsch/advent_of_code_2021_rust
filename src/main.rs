@@ -21,7 +21,8 @@ struct Opt {
 
 fn main() {
     let opt = Opt::from_args();
-    let text = std::fs::read_to_string(opt.file_path).unwrap();
+    let text =
+        std::fs::read_to_string(opt.file_path).expect("Unable to read the provided input file.");
     let problem_set = &PROBLEMS[opt.day - 1];
     println!("Day: {}", opt.day);
     println!("Part A: ({})", (problem_set.part_a)(&text));
