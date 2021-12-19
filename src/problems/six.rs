@@ -68,11 +68,16 @@ pub fn part_b(problem_text: &str) -> String {
     {
         initial_counts[time_left] += 1;
     }
+    // this maps timers to the number of lungfish currently at that timer
+    // idx 0 is the number of lungfish with 0 for there timer, etc
     let mut q: VecDeque<usize> = initial_counts.into();
 
     for _ in 0..256 {
+        // popping the front is the same thing as counting all the variables down by one
         let front = q.pop_front().unwrap();
+        // everything we popped off was a '0', so it makes a corresponding '8' at the end of the list
         q.push_back(front);
+        // then, the zeros also become six's
         q[6] += front;
     }
 
