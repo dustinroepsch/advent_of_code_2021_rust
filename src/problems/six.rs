@@ -73,14 +73,17 @@ pub fn part_b(problem_text: &str) -> String {
     let mut q: VecDeque<usize> = initial_counts.into();
 
     for _ in 0..256 {
-        // popping the front is the same thing as counting all the variables down by one
+        // popping the front is the same thing as counting all the lungfish down by one
         let front = q.pop_front().unwrap();
-        // everything we popped off was a '0', so it makes a corresponding '8' at the end of the list
+        //  all the fish we popped had counter '0', so the same number of counter '8' fish are
+        //  added to the end (8th index)
         q.push_back(front);
-        // then, the zeros also become six's
+        // then, the fish that used to be at the front are now 6 days away from hatching,
+        // so we add them to q[6]
         q[6] += front;
     }
 
+    // Count up all the fish!
     q.iter().sum::<usize>().to_string()
 }
 
