@@ -3,12 +3,13 @@ use advent_of_code_2021::problems::ProblemSet;
 use std::path::PathBuf;
 use structopt::StructOpt;
 
-const PROBLEMS: [ProblemSet; 5] = [
+const PROBLEMS: [ProblemSet; 6] = [
     problems::one::PROBLEM_SET,
     problems::two::PROBLEM_SET,
     problems::three::PROBLEM_SET,
     problems::four::PROBLEM_SET,
     problems::five::PROBLEM_SET,
+    problems::six::PROBLEM_SET,
 ];
 
 #[derive(StructOpt)]

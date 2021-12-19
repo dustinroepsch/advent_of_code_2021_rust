@@ -1,4 +1,5 @@
 use crate::problems::ProblemSet;
+use std::collections::VecDeque;
 
 pub const PROBLEM_SET: ProblemSet = ProblemSet { part_a, part_b };
 
@@ -56,8 +57,24 @@ pub fn part_a(problem_text: &str) -> String {
 }
 
 #[must_use]
-pub fn part_b(_problem_text: &str) -> String {
-    "hello_world".to_string()
+pub fn part_b(problem_text: &str) -> String {
+    let mut initial_counts = [0; 9];
+    for time_left in problem_text
+        .trim()
+        .split(',')
+        .filter_map(|n| n.parse::<usize>().ok())
+    {
+        initial_counts[time_left] += 1;
+    }
+    let mut q: VecDeque<usize> = initial_counts.into();
+
+    for _ in 0..256 {
+        let front = q.pop_front().unwrap();
+        q.push_back(front);
+        q[6] += front;
+    }
+
+    q.iter().sum::<usize>().to_string()
 }
 
 #[cfg(test)]
@@ -69,8 +86,8 @@ mod tests {
         assert_eq!(super::part_a(PROBLEM_TEXT), "390923");
     }
 
-    // #[test]
-    // fn part_b() {
-    //     assert_eq!(super::part_b(PROBLEM_TEXT), "1567");
-    // }
+    #[test]
+    fn part_b() {
+        assert_eq!(super::part_b(PROBLEM_TEXT), "1749945484935");
+    }
 }
