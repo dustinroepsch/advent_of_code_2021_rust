@@ -56,6 +56,8 @@ pub fn part_a(problem_text: &str) -> String {
     pool.len().to_string()
 }
 
+// Obviously this works for part a too,
+// but I am keeping my dumb part a solution around for nostalgia.
 #[must_use]
 pub fn part_b(problem_text: &str) -> String {
     let mut initial_counts = [0; 9];
