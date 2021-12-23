@@ -3,10 +3,14 @@ use itertools::Itertools;
 
 pub const PROBLEM_SET: ProblemSet = ProblemSet { part_a, part_b };
 
-fn find_cost(positions: &[i32], target_position: i32) -> usize {
+fn find_cost(positions: &[i64], target_position: i64) -> usize {
     positions
         .iter()
-        .map(|p| (target_position - p).abs() as usize)
+        .map(|p| {
+            let diff = (target_position - p).abs();
+            let diff: usize = diff.try_into().expect("unexpected int error");
+            diff
+        })
         .sum()
 }
 
@@ -14,17 +18,17 @@ fn natural_sum(upper_bound: usize) -> usize {
     (upper_bound * (upper_bound + 1)) / 2
 }
 
-fn find_exp_cost(positions: &[i32], target_position: i32) -> usize {
+fn find_exp_cost(positions: &[i64], target_position: i64) -> usize {
     positions
         .iter()
-        .map(|p| (target_position - p).abs() as usize)
+        .map(|p| (target_position - p).abs().try_into().unwrap())
         .map(natural_sum)
         .sum()
 }
 
 #[must_use]
 pub fn part_a(problem_text: &str) -> String {
-    let positions: Vec<i32> = problem_text
+    let positions: Vec<i64> = problem_text
         .trim()
         .split(',')
         .filter_map(|n| n.parse().ok())
@@ -36,15 +40,16 @@ pub fn part_a(problem_text: &str) -> String {
 
 #[must_use]
 pub fn part_b(problem_text: &str) -> String {
-    let positions: Vec<i32> = problem_text
+    let positions: Vec<i64> = problem_text
         .trim()
         .split(',')
         .filter_map(|n| n.parse().ok())
         .sorted()
         .collect();
-    let total: i32 = positions.iter().sum();
-    let average = (total as usize) / positions.len();
-    find_exp_cost(&positions, average as i32).to_string()
+    let total: i64 = positions.iter().sum();
+    let len: i64 = positions.len().try_into().unwrap();
+    let average = total / len;
+    find_exp_cost(&positions, average).to_string()
 }
 
 #[cfg(test)]

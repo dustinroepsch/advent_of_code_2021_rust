@@ -22,7 +22,7 @@ impl SignalPattern {
 
 #[derive(Debug)]
 struct Entry {
-    signal_patterns: Vec<SignalPattern>,
+    _signal_patterns: Vec<SignalPattern>,
     output_value: Vec<SignalPattern>,
 }
 
@@ -40,7 +40,7 @@ impl FromStr for Entry {
             .map(|s| SignalPattern(s.to_string()))
             .collect();
         Ok(Self {
-            signal_patterns,
+            _signal_patterns: signal_patterns,
             output_value,
         })
     }
@@ -77,6 +77,6 @@ mod tests {
 
     #[test]
     fn part_a() {
-        assert_eq!(super::part_a(PROBLEM_TEXT), "1529");
+        assert_eq!(super::part_a(PROBLEM_TEXT), "452");
     }
 }
